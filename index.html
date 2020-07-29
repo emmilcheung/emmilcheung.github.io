@@ -23,9 +23,10 @@
 </head>
 
 <body>
-    <header class="header fixed-top">
+    <header class="header">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" onclick="window.scrollTo({ top: '7vh', behavior: 'smooth' })" style="cursor: pointer;">Home</a>
+            <a class="navbar-brand" onclick="window.scrollTo({ top: '7vh', behavior: 'smooth' })"
+                style="cursor: pointer;"></a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent"
                 aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -34,29 +35,30 @@
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
-                        <a class="nav-link" onclick="move('education')">Education <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="#education"">Education <span
+                                class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="move('work-experience')">Work Experience</a>
+                        <a class="nav-link" href="#work-experience">Work Experience</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="move('tech-skills')">Technical Skill</a>
+                        <a class="nav-link" href="#tech-skills">Technical Skill</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="move('soft-skills')">Soft Skill</a>
+                        <a class="nav-link" href="#soft-skills">Soft Skill</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" onclick="move('projects')">Projects</a>
+                        <a class="nav-link" href="#projects">Projects</a>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
-    <main class="container p-5">
+    <main class="container p-3">
         <div id="title">
             <div class="about-content">
                 <div class="name">
-                    <h1>Cheung Tsz Ho</h1>
+                    <h2>Cheung Tsz Ho</h2>
                 </div>
                 <div class="info-list">
                     <ul>
@@ -72,7 +74,8 @@
                         </li>
                         <li>
                             <div class="info-text">
-                                <span><a href="mailto:emmilcheung2005@gmail.com" style="color: black;">emmilcheung2005@gmail.com</a></span>
+                                <span><a href="mailto:emmilcheung2005@gmail.com"
+                                        style="color: black;">emmilcheung2005@gmail.com</a></span>
                                 <svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-envelope-fill"
                                     fill="currentColor" xmlns="http://www.w3.org/2000/svg">
                                     <path fill-rule="evenodd"
@@ -92,7 +95,8 @@
                         </li>
                         <li>
                             <div class="info-text">
-                                <span><a href="https://github.com/emmilcheung" style="color: black">https://github.com/emmilcheung</a></span>
+                                <span><a href="https://github.com/emmilcheung"
+                                        style="color: black">https://github.com/emmilcheung</a></span>
                                 <svg width="1em" height="1em" role="img" viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <title>GitHub icon</title>
@@ -250,11 +254,13 @@
         </div>
     </main>
     <script>
-        const move = id =>{
+        const move = id => {
             var target = document.querySelector(`#${id}`);
-            target.scrollIntoView({block: "start", behavior: "smooth"});
-            var icon = document.querySelector(".navbar-toggler-icon");
-            icon.click()
+            setTimeout(() => {
+                target.scrollIntoView({ block: "start", behavior: "auto" });
+            }, 100)
+                var icon = document.querySelector(".navbar-toggler-icon");
+                icon.click()
         }
     </script>
 </body>
