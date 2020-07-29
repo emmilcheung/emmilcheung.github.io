@@ -1,0 +1,179 @@
+
+body{
+    background-color: rgb(243, 243, 243);
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+.header{
+    display: none
+}
+
+.container{
+    background-color: white;
+    margin-top: 40px;
+    margin-bottom: 40px;
+}
+
+hr{
+    border-top: 2px solid #59b0d8;
+}
+
+.nav-link{
+    cursor: pointer;
+}
+
+#education,
+#work-experience,
+#tech-skills,
+#soft-skills,
+#projects{
+    scroll-margin: 7vh;
+}
+
+.section-title{
+    font-weight: bold;
+    font-size: 1.7em;
+}
+
+.about-content{
+    min-height: 200px;
+}
+
+.name{
+    text-align: center;
+}
+
+.info-list ul {
+    position: relative;
+    list-style: none;
+}
+
+.info-list li{
+    position: absolute;
+    right: 0px;
+    font-size: 1.1em;
+    word-wrap: break-word;
+}
+
+.info-list li:nth-child(2){
+    top: 30px;
+}
+
+.info-list li:nth-child(3){
+    top: 60px;
+}
+
+.info-list li:nth-child(4){
+    top: 90px;
+}
+
+.info-list li svg{
+    margin-left: 5px;
+}
+
+.edu-title,
+.post,
+.project-title{
+    font-weight: bold;
+    font-size: 1.2em;
+}
+
+.skill-title{
+    font-weight: bold;
+}
+
+.project-link{
+    font-weight: normal;
+    font-size: 0.8em;
+}
+
+.school-name
+.company-title{
+    font-size: 1.2em;
+}
+
+.skill-content{
+    font-size: 0.95em;
+}
+
+.date{
+    color: #2edbdb;
+    font-weight: 600;
+    text-align: end;
+    font-size: 0.95em;
+}
+
+.resume-item ul {
+  list-style: none; /* Remove default bullets */
+}
+
+.resume-item{
+    margin-top: 1vh;
+    margin-bottom: 2vh;
+    font-size: 0.9em;
+}
+
+.resume-item li::before {
+  content: "\2022"; 
+  color: #3eb1b1;
+  font-size: 20px;
+  font-weight: bold; 
+  display: inline-block;
+  width: 1.5em; 
+  margin-left: -30px; 
+}
+
+.utilized{
+    font-style: italic;
+    border-bottom: 1px solid;
+}
+
+ul.soft-list{
+    margin-top: 20px;
+    margin-bottom: 20px;
+    list-style: none;
+    padding-left: 0px;
+}
+
+.soft-list li{
+    display: inline-block;
+    background-color: #2db3b3;
+    color: #FFFFFF;
+    border-radius: 5px;
+    padding: 10px;
+    margin: 0.5vh 5px;
+}
+
+
+@media screen and (max-width: 991.98px){
+    body{
+        font-size: 0.7rem;
+    }
+
+    .header{
+        display: block;
+    }
+    .container{
+        margin-top: 57px;
+    }
+}
+
+@media screen and (max-width: 440px){
+    .info-list li{
+        right: initial;
+        left: 0;
+    }
+
+    .info-list li svg{
+        margin-right: 5px;
+    }
+
+    .info-text{
+        display: flex;
+        flex-direction: row-reverse;
+    }
+
+    .info-list li:nth-child(4){
+    top: 100px;
+}
+}
