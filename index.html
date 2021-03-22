@@ -36,7 +36,7 @@
                 <ul class="navbar-nav mr-auto">
                     <li class="nav-item active">
                         <a class="nav-link" href="#education"">Education <span
-                                class="sr-only">(current)</span></a>
+                                class=" sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#work-experience">Work Experience</a>
@@ -110,7 +110,7 @@
             </div>
         </div>
         <hr>
-        <div class="body my-3">
+        <div class="body mx-2 my-3">
             <div class="row">
                 <div class="col-md-6">
                     <section id="education">
@@ -141,6 +141,19 @@
                             <div class="section-title">Work Experience</div>
                             <div class="resume-items">
                                 <div class="resume-item">
+                                    <div class="post">Web App Development Intern</div>
+                                    <div class="company-title">TimeMach Limited</div>
+                                    <div class="date">Aug 2020-Oct 2020</div>
+                                    <ul>
+                                        <li>Suggested the database design for the new business idea and constructed it
+                                            using Google Firestore and cloud function</li>
+                                        <li>Developed a mobile friendly progressive web app as prototype from scratch
+                                            using ReactJS and launched it for beta</li>
+                                        <li>Participated weekly meetings with Director, supervisor and the UX Designer
+                                            and gave suggestions to the development direction</li>
+                                    </ul>
+                                </div>
+                                <div class="resume-item">
                                     <div class="post">Part-time Customer Services Assistance</div>
                                     <div class="company-title">The Commercial Press Hong Kong</div>
                                     <div class="date">Feb 2017 - Present</div>
@@ -149,9 +162,9 @@
                                             information and order request</li>
                                         <li>Guided and mentored 7 summer workers serving in total 14386 customers,
                                             266439 textbook requests in 2019 summer (July – September 2019)</li>
-                                        <li>Implemented simple WhatsApp and phone message automation scripts in
+                                        <!-- <li>Implemented simple WhatsApp and phone message automation scripts in
                                             python
-                                            selenium framework for colleague to simplify daily repetitive works</li>
+                                            selenium framework for colleague to simplify daily repetitive works</li> -->
                                     </ul>
                                 </div>
                                 <div class="resume-item">
@@ -182,11 +195,11 @@
                                 </div>
                                 <div class="resume-item">
                                     <div class="skill-title">Frameworks/Libraries</div>
-                                    <div class="skill-content">React, Bootstrap, Express, Flask</div>
+                                    <div class="skill-content">React.js, Next.js, Bootstrap, Express, Flask</div>
                                 </div>
                                 <div class="resume-item">
                                     <div class="skill-title">Database</div>
-                                    <div class="skill-content">MySQL, MongoDB</div>
+                                    <div class="skill-content">MySQL, MongoDB, Firestore(Google)</div>
                                 </div>
                             </div>
                         </div>
@@ -259,8 +272,8 @@
             setTimeout(() => {
                 target.scrollIntoView({ block: "start", behavior: "auto" });
             }, 100)
-                var icon = document.querySelector(".navbar-toggler-icon");
-                icon.click()
+            var icon = document.querySelector(".navbar-toggler-icon");
+            icon.click()
         }
     </script>
 </body>
