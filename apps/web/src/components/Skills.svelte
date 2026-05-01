@@ -14,12 +14,12 @@
     {
       icon: "{ }",
       title: "Frameworks & Libraries",
-      skills: ["Express.js", "NestJS", "ReactJS", "Next.js", "Jest", "Mocha", "Flask", "Spring Boot", "Serverless Framework"]
+      skills: ["Express.js", "NestJS", "ReactJS", "Next.js", "Jest", "Mocha", "Playwright", "Flask", "Spring Boot", "gRPC"]
     },
     {
       icon: "[ ]",
       title: "Tools & Platforms",
-      skills: ["Apidog", "Logtail", "Git", "GitLab", "Docker", "Terraform", "MongoDB Atlas", "Redis Cloud", "AWS", "GCP", "Firebase"]
+      skills: ["Git", "GitLab", "Docker", "Kubernetes", "Terraform", "MongoDB", "PostgreSQL", "Redis", "AWS", "GCP", "Firebase"]
     }
   ];
 </script>

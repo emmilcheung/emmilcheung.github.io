@@ -7,5 +7,9 @@ export default defineConfig({
   build: {
     outDir: 'dist',
     assetsDir: 'assets',
-  }
+  },
+  resolve: {
+    // Ensure a single Svelte instance across workspace packages
+    dedupe: ['svelte'],
+  },
 })

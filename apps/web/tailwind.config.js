@@ -3,6 +3,8 @@ export default {
   content: [
     "./index.html",
     "./src/**/*.{svelte,js,ts}",
+    // Include chat-widget package so its Tailwind classes are not purged
+    "../../packages/chat-widget/src/**/*.{svelte,js,ts}",
   ],
   theme: {
     extend: {
@@ -13,6 +15,8 @@ export default {
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in',
         'slide-up': 'slideUp 0.6s ease-out',
+        'chat-slide-up': 'chatSlideUp 0.3s cubic-bezier(0.34, 1.56, 0.64, 1)',
+        'bounce-dot': 'bounceDot 1.2s infinite',
       },
       keyframes: {
         fadeIn: {
@@ -22,6 +26,14 @@ export default {
         slideUp: {
           '0%': { transform: 'translateY(20px)', opacity: '0' },
           '100%': { transform: 'translateY(0)', opacity: '1' },
+        },
+        chatSlideUp: {
+          '0%': { transform: 'translateY(16px) scale(0.97)', opacity: '0' },
+          '100%': { transform: 'translateY(0) scale(1)', opacity: '1' },
+        },
+        bounceDot: {
+          '0%, 80%, 100%': { transform: 'translateY(0)' },
+          '40%': { transform: 'translateY(-6px)' },
         },
       },
     },

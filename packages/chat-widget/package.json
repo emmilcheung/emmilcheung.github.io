@@ -1,0 +1,26 @@
+{
+  "name": "@emmil/chat-widget",
+  "version": "0.1.0",
+  "type": "module",
+  "exports": {
+    ".": {
+      "svelte": "./src/lib/index.ts",
+      "default": "./src/lib/index.ts"
+    }
+  },
+  "files": [
+    "src/lib"
+  ],
+  "peerDependencies": {
+    "svelte": "^4.0.0"
+  },
+  "devDependencies": {
+    "@types/dompurify": "^3.2.0",
+    "svelte": "^4.2.19",
+    "typescript": "^5.7.2"
+  },
+  "dependencies": {
+    "dompurify": "^3.4.2",
+    "marked": "^18.0.3"
+  }
+}

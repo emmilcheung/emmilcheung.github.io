@@ -7,12 +7,22 @@ yarn-error.log*
 pnpm-debug.log*
 lerna-debug.log*
 
+# Dependencies
 node_modules
+**/node_modules
+
+# Build output
 dist
 dist-ssr
-*.local
+apps/*/dist
 
-# Editor directories and files
+# Env files
+*.local
+.env
+.env.*
+!.env.example
+
+# Editor
 .vscode/*
 !.vscode/extensions.json
 .idea
@@ -25,3 +35,18 @@ dist-ssr
 
 # Old files
 *.old
+
+# SST — generated on `npx sst@latest install`, not committed
+.sst/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+*.egg-info/
+
+# RAG data — commit resume.db only after intentional `rag:build` run
+# Uncomment the line below to exclude it from git (keep it local-only):
+# data/resume.db
