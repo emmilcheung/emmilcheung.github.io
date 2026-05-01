@@ -1,16 +1,16 @@
 /// <reference path="./.sst/platform/config.d.ts" />
 
 /**
- * SST v3 (Ion) — Infrastructure for the resume RAG chat Lambda.
+ * SST v4 — Infrastructure for the resume RAG chat Lambda.
  *
  * Deploys:
- *   - Lambda function (Node 22, 512 MB) with bundled resume.db
+ *   - Lambda function (Node 24, 512 MB) with bundled resume.db
  *   - API Gateway V2 (HTTP API) with CORS locked to GitHub Pages origin
  *
  * Usage:
- *   npx sst@latest install          # first time only
- *   npx sst secret set OpenRouterKey sk-or-...
- *   npx sst deploy --stage production
+ *   pnpm sst install          # first time only
+ *   pnpm sst secret set OpenRouterKey sk-or-...
+ *   pnpm sst deploy --stage production
  *
  * After deploy, capture the chatUrl output and add it as
  * VITE_CHAT_URL in the GitHub Actions secret.
@@ -37,7 +37,7 @@ export default $config({
 
     const chat = new sst.aws.Function('Chat', {
       handler: 'packages/functions/src/chat.handler',
-      runtime: 'nodejs20.x',
+      runtime: 'nodejs24.x',
       memory: '512 MB',
       timeout: '30 seconds',
 
