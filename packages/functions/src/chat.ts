@@ -10,9 +10,9 @@
  */
 
 import fs from 'node:fs';
-import path from 'node:path';
 import type { APIGatewayProxyEventV2, APIGatewayProxyResultV2 } from 'aws-lambda';
 import Database from 'better-sqlite3';
+import * as sqliteVec from 'sqlite-vec';
 import { OpenRouter } from '@openrouter/sdk';
 
 // ── Clients (re-used across warm invocations) ─────────────────────────────────
@@ -25,48 +25,69 @@ const OR_OPTS = { headers: { 'HTTP-Referer': 'https://emmilcheung.github.io' } }
 
 const EMBED_MODEL = 'qwen/qwen3-embedding-4b';
 const CHAT_MODEL  = 'deepseek/deepseek-v4-flash';
-const TOP_K       = 4;
+const EMBED_DIMS  = 2560;
+const TOP_K       = 8;
 
-// ── Warm-start chunk cache ────────────────────────────────────────────────────
-interface Chunk {
-  category: string;
-  content: string;
-  embedding: Float32Array;
+// ── DB connection cache (warm-start) ─────────────────────────────────────────
+//
+// IMPLEMENTATION: sqlite-vec Tier 1 — HNSW index inside SQLite
+//
+// The build script populates two tables:
+//   chunks(id, category, content, embedding BLOB)  — human-readable store
+//   vec_chunks(chunk_id, embedding FLOAT[N])        — vec0 virtual table (HNSW)
+//
+// At query time the Lambda opens the DB once, loads the sqlite-vec extension
+// (which activates the HNSW graph stored in vec_chunks shadow tables), and
+// runs a single SQL k-NN query — no full table scan, no in-memory float load.
+//
+// vec0 uses L2 (Euclidean) distance.  For unit-normalized embeddings this gives
+// the same ranking as cosine similarity: ||a−b||² = 2 − 2·cos(θ).
+// Qwen3-embedding outputs are unit-normalized by the model.
+//
+// NEXT SCALE TIER (pgvector): replace getDb() with a pg.Pool connection.
+// The SQL shape becomes: ORDER BY embedding <=> $1::vector LIMIT $2
+// with a GIN/HNSW index — identical interface, external Postgres backing.
+
+let _db: Database.Database | null = null;
+let _dbSrcMtime = 0;
+
+function readMeta(database: Database.Database, key: string): string | undefined {
+  const row = database.prepare('SELECT value FROM meta WHERE key = ?').get(key) as { value: string } | undefined;
+  return row?.value;
 }
 
-let chunks: Chunk[] | null = null;
+function validateDatabaseMetadata(database: Database.Database): void {
+  const dbModel = readMeta(database, 'embed_model');
+  const dbDims  = Number.parseInt(readMeta(database, 'embed_dims') ?? '', 10);
+  if (dbModel !== EMBED_MODEL) {
+    throw new Error(`resume.db embed_model mismatch: expected ${EMBED_MODEL}, got ${dbModel ?? 'missing'}`);
+  }
+  if (dbDims !== EMBED_DIMS) {
+    throw new Error(`resume.db embed_dims mismatch: expected ${EMBED_DIMS}, got ${Number.isNaN(dbDims) ? 'missing' : dbDims}`);
+  }
+}
 
-function loadChunks(): Chunk[] {
-  if (chunks) return chunks;
-
+function getDb(): Database.Database {
   const src  = process.env.DB_PATH ?? '/var/task/resume.db';
   const dest = '/tmp/resume.db';
 
-  // Always recopy if the source is newer than the cached copy (handles schema upgrades
-  // and sst dev hot-reloads). In real Lambda /tmp is always fresh on cold start.
-  const srcMtime  = fs.statSync(src).mtimeMs;
-  const destMtime = fs.existsSync(dest) ? fs.statSync(dest).mtimeMs : 0;
-  if (srcMtime > destMtime) {
+  const srcMtime = fs.statSync(src).mtimeMs;
+  if (srcMtime > _dbSrcMtime) {
+    // Source is newer — close stale connection, recopy, reopen (handles sst dev hot-reloads)
+    _db?.close();
+    _db = null;
     fs.copyFileSync(src, dest);
+    _dbSrcMtime = srcMtime;
   }
 
-  const db   = new Database(dest, { readonly: true });
-  const rows = db.prepare('SELECT category, content, embedding FROM chunks').all() as Array<{
-    category: string;
-    content: string;
-    embedding: Buffer;
-  }>;
-  db.close();
+  if (!_db) {
+    _db = new Database(dest, { readonly: true });
+    sqliteVec.load(_db);           // activates HNSW graph in vec_chunks shadow tables
+    validateDatabaseMetadata(_db);
+    console.log('[cold] opened resume.db with sqlite-vec');
+  }
 
-  chunks = rows.map(r => ({
-    category: r.category ?? 'general',
-    content: r.content,
-    // Buffer → ArrayBuffer → Float32Array
-    embedding: new Float32Array(r.embedding.buffer, r.embedding.byteOffset, r.embedding.byteLength / 4),
-  }));
-
-  console.log(`[cold] loaded ${chunks.length} chunks from resume.db`);
-  return chunks;
+  return _db;
 }
 
 // ── OpenRouter embedding ────────────────────────────────────────────────────
@@ -81,25 +102,34 @@ async function embedText(text: string): Promise<Float32Array> {
   return new Float32Array(emb);
 }
 
-// ── Vector search ─────────────────────────────────────────────────────────────
-function cosineSimilarity(a: Float32Array, b: Float32Array): number {
-  let dot = 0, magA = 0, magB = 0;
-  for (let i = 0; i < a.length; i++) {
-    dot  += a[i]! * b[i]!;
-    magA += a[i]! ** 2;
-    magB += b[i]! ** 2;
-  }
-  const denom = Math.sqrt(magA) * Math.sqrt(magB);
-  return denom === 0 ? 0 : dot / denom;
-}
-
+// ── Vector search via sqlite-vec HNSW index ───────────────────────────────────
 interface RankedChunk { category: string; content: string; score: number; }
 
-function topKChunks(queryEmbedding: Float32Array, allChunks: Chunk[], k: number): RankedChunk[] {
-  return allChunks
-    .map(c => ({ category: c.category, content: c.content, score: cosineSimilarity(queryEmbedding, c.embedding) }))
-    .sort((a, b) => b.score - a.score)
-    .slice(0, k);
+// k-NN query delegated to the sqlite-vec HNSW index in vec_chunks.
+// The query vector is passed as a JSON float array; sqlite-vec deserialises it.
+// `distance` is L2 distance; converted to cosine similarity using the identity
+// for unit vectors: sim = 1 − dist²/2, giving a score in [−1, 1].
+function topKChunks(queryEmbedding: Float32Array, k: number): RankedChunk[] {
+  const database = getDb();
+  // vec0 exposes results via `rowid`; join back to chunks on that.
+  // BigInt is required for the `k` binding — vec0 rejects JS number type.
+  const rows = database.prepare(`
+    SELECT c.category, c.content, v.distance
+    FROM   vec_chunks v
+    JOIN   chunks c ON c.id = v.rowid
+    WHERE  v.embedding MATCH ?
+      AND  k = ?
+    ORDER BY v.distance
+  `).all(JSON.stringify(Array.from(queryEmbedding)), BigInt(k)) as Array<{
+    category: string;
+    content: string;
+    distance: number;
+  }>;
+  return rows.map(r => ({
+    category: r.category,
+    content:  r.content,
+    score:    1 - r.distance ** 2 / 2,
+  }));
 }
 
 // ── Prompt ────────────────────────────────────────────────────────────────────
@@ -151,11 +181,23 @@ function err(status: number, message: string): APIGatewayProxyResultV2 {
   return { statusCode: status, headers: CORS_HEADERS, body: JSON.stringify({ error: message }) };
 }
 
+function hasAllowedOrigin(event: APIGatewayProxyEventV2): boolean {
+  const allowedOrigin = process.env.ALLOWED_ORIGIN;
+  if (!allowedOrigin || allowedOrigin === '*') return true;
+
+  const requestOrigin = event.headers.origin ?? event.headers.Origin;
+  return requestOrigin === allowedOrigin;
+}
+
 // ── Handler ───────────────────────────────────────────────────────────────────
 export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGatewayProxyResultV2> => {
   // Preflight
   if (event.requestContext.http.method === 'OPTIONS') {
     return { statusCode: 204, headers: CORS_HEADERS, body: '' };
+  }
+
+  if (!hasAllowedOrigin(event)) {
+    return err(403, 'Forbidden origin.');
   }
 
   // Parse body
@@ -171,16 +213,13 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
   }
 
   try {
-    // 1. Load chunks (no-op on warm start)
-    const allChunks = loadChunks();
-
-    // 2. Embed the question via Voyage AI
+    // 1. Embed the question
     const queryEmbedding = await embedText(question);
 
-    // 3. Retrieve top-K relevant chunks
-    const context = topKChunks(queryEmbedding, allChunks, TOP_K);
+    // 2. k-NN via sqlite-vec HNSW index (DB open cached across warm invocations)
+    const context = topKChunks(queryEmbedding, TOP_K);
 
-    // 4. Generate answer via GPT-4o
+    // 4. Generate the answer with the configured chat model
     const message = await openRouter.chat.send(
       {
         model: CHAT_MODEL,
@@ -196,12 +235,12 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
     return ok({ answer });
 
   } catch (e) {
-    // OpenAI rate limit — surface a clear, non-alarming message to the visitor
+    // Upstream rate limit — surface a clear, non-alarming message to the visitor
     if (
       typeof e === 'object' && e !== null &&
       'status' in e && (e as { status: number }).status === 429
     ) {
-      console.warn('[chat] OpenAI rate limit hit (429)');
+      console.warn('[chat] OpenRouter rate limit hit (429)');
       return ok({
         answer:
           "The assistant is temporarily unavailable due to high demand — this is expected behaviour, not a malfunction. " +

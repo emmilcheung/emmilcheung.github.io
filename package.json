@@ -6,7 +6,9 @@
     "dev": "pnpm --filter @emmil/web dev",
     "build": "pnpm --filter @emmil/web build",
     "check": "pnpm --filter @emmil/web check",
-    "rag:build": "cd services/rag && python build_rag.py",
+    "rag:embed": "cd services/rag && python build_rag.py",
+    "rag:index": "node services/rag/add_vec_index.mjs",
+    "rag:build": "pnpm rag:embed && pnpm rag:index",
     "infra:dev": "sst dev",
     "infra:deploy": "sst deploy",
     "infra:remove": "sst remove"

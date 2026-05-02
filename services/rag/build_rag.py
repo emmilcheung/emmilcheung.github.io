@@ -2,7 +2,7 @@
 RAG build script: Resume → clean → section-aware chunk → embed → SQLite
 
 Input modes (in priority order):
-  1. Curated markdown  data/resume_curated.md  (preferred — manually refined)
+    1. Curated markdown  docs/resume_curated.md  (preferred — manually refined)
   2. PDF fallback      docs/*.pdf              (legacy)
 
 Set env var SOURCE_MODE=pdf to force PDF mode.
@@ -222,7 +222,7 @@ def embed_chunks(chunks: list[Chunk]) -> list[tuple[Chunk, list[float]]]:
 
 # ── SQLite writer ─────────────────────────────────────────────────────────────
 def write_sqlite(pairs: list[tuple[Chunk, list[float]]]) -> None:
-    """Persist chunks + float32 embeddings to SQLite."""
+    """Persist chunks + float32 embeddings to plain SQLite (no extensions required)."""
     DB_OUTPUT.parent.mkdir(parents=True, exist_ok=True)
 
     conn = sqlite3.connect(DB_OUTPUT)
@@ -272,6 +272,7 @@ def write_sqlite(pairs: list[tuple[Chunk, list[float]]]) -> None:
 
     size_kb = DB_OUTPUT.stat().st_size // 1024
     print(f"\nWrote {len(pairs)} chunks → {DB_OUTPUT}  ({size_kb} KB)")
+    print("Run `pnpm rag:index` next to build the sqlite-vec HNSW index.")
 
 
 # ── Main ──────────────────────────────────────────────────────────────────────

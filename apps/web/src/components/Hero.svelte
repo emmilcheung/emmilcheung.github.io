@@ -1,11 +1,5 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-  
-  let visible = false;
-  
-  onMount(() => {
-    setTimeout(() => visible = true, 100);
-  });
+  // No runtime visibility state required; always render hero text so the section is visible.
 </script>
 
 <section id="hero" class="relative min-h-screen flex items-center justify-center px-4 py-20 overflow-hidden">
@@ -14,7 +8,7 @@
   <div class="absolute top-20 right-10 w-96 h-96 bg-amber-200/30 dark:bg-amber-900/20 blob animate-pulse" style="animation-duration: 4s;"></div>
   <div class="absolute bottom-20 left-10 w-80 h-80 bg-rose-200/30 dark:bg-rose-900/20 blob-2 animate-pulse" style="animation-duration: 5s; animation-delay: 1s;"></div>
   
-  <div class="max-w-5xl mx-auto text-center relative z-10" class:opacity-100={visible} class:opacity-0={!visible}>
+  <div class="max-w-5xl mx-auto text-center relative z-10 animate-fade-in">
     <!-- Handwritten accent -->
     <div class="handwriting text-3xl md:text-4xl text-amber-600 dark:text-amber-400 mb-2 transform -rotate-2">
       Hey, I'm
@@ -86,15 +80,3 @@
   </div>
 </section>
 
-<style>
-  .opacity-0 {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  
-  .opacity-100 {
-    opacity: 1;
-    transform: translateY(0);
-    transition: all 1s cubic-bezier(0.34, 1.56, 0.64, 1);
-  }
-</style>

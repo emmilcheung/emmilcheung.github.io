@@ -1,13 +1,10 @@
 # Core RAG framework
 llama-index-core>=0.12.0
-llama-index-embeddings-openai>=0.3.0
 llama-index-readers-file>=0.4.0     # PDF reader (uses pypdf internally)
 
 # Better PDF extraction (LlamaIndex will use this if available)
 pymupdf>=1.25.0
 
-# OpenAI SDK (embeddings)
-openai>=1.0.0
+# HTTP client for OpenRouter embedding requests
+requests>=2.32.0
 
-# Numerical ops for float32 packing
-numpy>=1.26.0

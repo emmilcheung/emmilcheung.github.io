@@ -58,7 +58,7 @@ export default $config({
       // Tell SST's bundler to install the native better-sqlite3 binary
       // for the Lambda linux-x64 target rather than the host binary.
       nodejs: {
-        install: ['better-sqlite3'],
+        install: ['better-sqlite3', 'sqlite-vec'],
       },
     });
 
