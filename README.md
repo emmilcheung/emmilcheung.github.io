@@ -2,7 +2,7 @@
 
 🔗 **Live Site:** https://emmilcheung.github.io/
 
-Modern, responsive portfolio website built with Svelte, Vite, and Tailwind CSS.
+Modern, responsive portfolio website built with Svelte, Vite, Tailwind CSS, and SST.
 
 ## 🚀 Features
 
@@ -15,21 +15,22 @@ Modern, responsive portfolio website built with Svelte, Vite, and Tailwind CSS.
 
 ## 🛠️ Tech Stack
 
-- **Framework:** Svelte 4
-- **Build Tool:** Vite 6
+- **Framework:** Svelte 5
+- **Build Tool:** Vite 8
 - **Styling:** Tailwind CSS 3
 - **Deployment:** GitHub Pages
+- **Infra:** SST + AWS Lambda for the portfolio chat API
 - **CI/CD:** GitHub Actions
 
 ## 📦 Development
 
 ### Prerequisites
 
-- Node.js 18+ or 20 (LTS recommended)
-- npm
+- Node.js 20
+- pnpm
 - nvm (recommended for Node version management)
 
-> **Note:** If using Node 24+, you may encounter compatibility issues with Vite 5. Use Node 20 LTS for best results:
+> **Note:** Use Node 20 for all local package operations in this repo:
 > ```bash
 > nvm use 20
 > ```
@@ -37,13 +38,13 @@ Modern, responsive portfolio website built with Svelte, Vite, and Tailwind CSS.
 ### Install Dependencies
 
 ```bash
-npm install
+pnpm install
 ```
 
 ### Start Development Server
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 Visit `http://localhost:5173` to view the site.
@@ -51,7 +52,7 @@ Visit `http://localhost:5173` to view the site.
 ### Build for Production
 
 ```bash
-npm run build
+pnpm build
 ```
 
 The built files will be in the `dist` directory.
@@ -59,28 +60,26 @@ The built files will be in the `dist` directory.
 ### Preview Production Build
 
 ```bash
-npm run preview
+pnpm --filter @emmil/web preview
 ```
 
 ## 🚀 Deployment
 
 This site automatically deploys to GitHub Pages when you push to the `master` branch.
 
-### Manual Deployment
-
-```bash
-npm run deploy
-```
+The portfolio chat API is deployed separately via SST.
 
 ## 📝 Content Update
 
-To update resume content, edit the component files in `src/components/`:
+To update website content, edit the component files in `apps/web/src/components/`:
 
 - `Hero.svelte` - Header and contact information
 - `Experience.svelte` - Work experience
 - `Education.svelte` - Educational background
 - `Certifications.svelte` - Professional certifications
 - `Skills.svelte` - Technical skills
+
+To rebuild the RAG database used by the chat assistant, see `services/rag/README.md`.
 
 ## 📄 License
 

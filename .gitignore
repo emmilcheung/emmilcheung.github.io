@@ -49,4 +49,4 @@ venv/
 
 # RAG data — commit resume.db only after intentional `rag:build` run
 # Uncomment the line below to exclude it from git (keep it local-only):
-# data/resume.db
+data/resume.db

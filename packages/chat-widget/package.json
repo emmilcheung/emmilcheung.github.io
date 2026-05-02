@@ -12,11 +12,11 @@
     "src/lib"
   ],
   "peerDependencies": {
-    "svelte": "^4.0.0"
+    "svelte": "^5.55.5"
   },
   "devDependencies": {
     "@types/dompurify": "^3.2.0",
-    "svelte": "^4.2.19",
+    "svelte": "^5.55.5",
     "typescript": "^5.7.2"
   },
   "dependencies": {

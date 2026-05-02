@@ -2,13 +2,13 @@
 
 ## Prerequisites
 
-- Node.js 20 and npm
+- Node.js 20 and pnpm
 - Modern web browser
 
 ## Installation
 
 ```bash
-npm install
+pnpm install
 ```
 
 ## Development
@@ -16,7 +16,7 @@ npm install
 Start the development server with hot reload:
 
 ```bash
-npm run dev
+pnpm dev
 ```
 
 The site will be available at `http://localhost:5173`
@@ -26,7 +26,7 @@ The site will be available at `http://localhost:5173`
 Run TypeScript type checking:
 
 ```bash
-npm run check
+pnpm check
 ```
 
 ## Building
@@ -34,7 +34,7 @@ npm run check
 Build for production:
 
 ```bash
-npm run build
+pnpm build
 ```
 
 The output will be in the `dist` directory.
@@ -44,7 +44,7 @@ The output will be in the `dist` directory.
 Preview the production build locally:
 
 ```bash
-npm run preview
+pnpm --filter @emmil/web preview
 ```
 
 ## Deployment
@@ -53,42 +53,32 @@ npm run preview
 
 Push to the `master` branch and GitHub Actions will automatically build and deploy to GitHub Pages.
 
-### Manual Deployment
+### API Deployment
 
 ```bash
-npm run deploy
+pnpm infra:deploy
 ```
 
 ## Project Structure
 
 ```
 .
-├── src/
-│   ├── components/          # Svelte components
-│   │   ├── Hero.svelte
-│   │   ├── Experience.svelte
-│   │   ├── Education.svelte
-│   │   ├── Certifications.svelte
-│   │   ├── Skills.svelte
-│   │   └── Footer.svelte
-│   ├── App.svelte          # Main app component
-│   ├── main.ts             # Entry point
-│   ├── app.css             # Global styles
-│   └── vite-env.d.ts       # Type definitions
-├── index.html              # HTML template
-├── vite.config.ts          # Vite configuration
-├── svelte.config.ts        # Svelte configuration
-├── tailwind.config.js      # Tailwind CSS configuration
-├── postcss.config.js       # PostCSS configuration
-├── tsconfig.json           # TypeScript configuration
-└── package.json            # Dependencies and scripts
+├── apps/
+│   └── web/                # Svelte frontend app
+├── packages/
+│   ├── chat-widget/        # Shared chat widget package
+│   └── functions/          # Lambda handler source
+├── services/
+│   └── rag/                # Resume chunking + embedding build step
+├── data/                   # Generated resume.db artifact
+└── sst.config.ts           # SST infrastructure definition
 ```
 
 ## Customization
 
 ### Updating Content
 
-Edit the component files in `src/components/` to update your resume content:
+Edit the component files in `apps/web/src/components/` to update your resume content:
 
 - **Hero.svelte** - Name, contact info, and hero section
 - **Experience.svelte** - Work experience with achievements
@@ -122,20 +112,20 @@ colors: {
 
 If port 5173 is already in use:
 ```bash
-npm run dev -- --port 3000
+pnpm --filter @emmil/web dev -- --port 3000
 ```
 
 ### Build Errors
 
 Clear cache and reinstall:
 ```bash
-rm -rf node_modules package-lock.json
-npm install
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
 ```
 
 ### Type Errors
 
 Run type check to see all errors:
 ```bash
-npm run check
+pnpm check
 ```

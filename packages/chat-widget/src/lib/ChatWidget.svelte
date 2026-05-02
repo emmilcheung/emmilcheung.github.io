@@ -3,8 +3,8 @@
   import type { ChatWidgetProps } from './types';
 
   export let apiUrl: ChatWidgetProps['apiUrl'];
-  export let title: ChatWidgetProps['title'] = 'Ask about Emmil';
-  export let placeholder: ChatWidgetProps['placeholder'] = 'Ask about my experience, skills...';
+  export let title: string = 'Ask about Emmil';
+  export let placeholder: string = 'Ask about my experience, skills...';
 
   let open = false;
   let firstOpen = true;
