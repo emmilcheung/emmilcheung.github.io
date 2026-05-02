@@ -9,8 +9,19 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: '#3b82f6',
-        secondary: '#8b5cf6',
+        paper: '#F2EDE0',
+        'paper-deep': '#E8E1CF',
+        ink: '#161210',
+        'ink-soft': '#2B241F',
+        muted: '#8A8275',
+        rule: '#C9C0AB',
+        accent: '#B83A1F',
+        'accent-deep': '#8E2A12',
+      },
+      fontFamily: {
+        display: ['Fraunces', 'Newsreader', 'Georgia', 'serif'],
+        serif: ['Newsreader', 'Georgia', 'serif'],
+        mono: ['"JetBrains Mono"', 'ui-monospace', 'monospace'],
       },
       animation: {
         'fade-in': 'fadeIn 0.6s ease-in',

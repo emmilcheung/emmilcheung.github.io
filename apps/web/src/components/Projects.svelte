@@ -1,6 +1,5 @@
 <script lang="ts">
   interface ProjectHighlight {
-    icon: string;
     title: string;
     description: string;
   }
@@ -15,23 +14,20 @@
 
   const projects: Project[] = [
     {
-      title: "Ticketing Platform — Polyglot Microservices",
-      subtitle: "Event ticketing system built with 8 independently deployable microservices",
+      title: "Ticketing Platform",
+      subtitle: "Polyglot event-ticketing system built across eight independently deployable microservices.",
       githubUrl: "https://github.com/emmilcheung/k8s-multi-language-gRPC-microservice",
       techStack: ["Go", "Java", "Spring Boot", "TypeScript", "NestJS", "Next.js", "PostgreSQL", "MongoDB", "Redis", "Kafka", "gRPC", "Kubernetes", "GraphQL", "Kong"],
       highlights: [
         {
-          icon: "🏗️",
           title: "Polyglot Microservices Architecture",
           description: "Designed and built a polyglot event-ticketing platform comprising 8 independently deployable microservices with per-service data ownership, Apache Kafka event-driven fan-out, and saga-based order orchestration via transactional outbox."
         },
         {
-          icon: "⚡",
           title: "Real-time Seat Reservation",
           description: "Implemented real-time seat reservation via dual-write: Redis hot path for sub-second holds with PostgreSQL as source of truth, gRPC contracts between services, and SSE push for live seat-map updates across manual and auto-assign modes."
         },
         {
-          icon: "🌐",
           title: "GraphQL Federation Gateway & REST APIs",
           description: "Built a GraphQL Federation gateway (Apollo Router, 6 subgraphs) and REST APIs through Kong with RS256 JWT/JWKS auth, rate limiting, CSRF protection, and DB-less config — supporting both client-facing and inter-service query patterns."
         }
@@ -40,67 +36,91 @@
   ];
 </script>
 
-<section id="projects" class="py-20 px-4 bg-gradient-to-br from-amber-50/50 to-orange-50/50 dark:from-slate-800/50 dark:to-slate-900">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-16">
-      <div class="handwriting text-2xl text-amber-600 dark:text-amber-400 mb-2">Things I've built</div>
-      <h2 class="text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-100">
-        Projects
-      </h2>
-    </div>
+<section id="projects" class="px-6 md:px-10 py-24 md:py-32 bg-paper-deep/40">
+  <div class="max-w-[1400px] mx-auto">
 
-    <div class="space-y-8">
-      {#each projects as project, i}
-        <div
-          class="bg-white dark:bg-slate-800 rounded-3xl p-8 hover:shadow-xl transition-all duration-300 border-2 border-amber-100 dark:border-slate-700 relative overflow-hidden"
-          style="animation-delay: {i * 0.1}s"
-        >
-          <!-- Decorative blob -->
-          <div class="absolute top-0 right-0 w-40 h-40 bg-amber-200/20 dark:bg-amber-900/10 rounded-full -mr-20 -mt-20 pointer-events-none"></div>
-
-          <div class="flex flex-col md:flex-row md:items-start md:justify-between mb-6 relative z-10">
-            <div class="mb-4 md:mb-0">
-              <h3 class="text-2xl font-bold text-slate-900 dark:text-white mb-2">{project.title}</h3>
-              <p class="text-slate-600 dark:text-slate-400">{project.subtitle}</p>
-            </div>
-            {#if project.githubUrl}
-              <a
-                href={project.githubUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                class="flex items-center gap-2 px-4 py-2 bg-slate-800 dark:bg-slate-700 text-white rounded-xl hover:bg-slate-700 dark:hover:bg-slate-600 transition-all hover:-translate-y-0.5 shadow-md text-sm font-medium shrink-0"
-              >
-                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-                </svg>
-                View on GitHub
-              </a>
-            {/if}
-          </div>
-
-          <div class="mb-6 p-4 bg-amber-50 dark:bg-slate-700/50 rounded-2xl border border-amber-200 dark:border-slate-600 relative z-10">
-            <p class="font-semibold text-slate-700 dark:text-slate-300 mb-3 uppercase text-xs tracking-wider">
-              Tech Stack
-            </p>
-            <div class="flex flex-wrap gap-2">
-              {#each project.techStack as tech}
-                <span class="px-3 py-1.5 bg-amber-100 dark:bg-amber-900/30 text-amber-900 dark:text-amber-300 rounded-full text-sm font-medium border border-amber-200 dark:border-amber-800">
-                  {tech}
-                </span>
-              {/each}
-            </div>
-          </div>
-
-          <div class="space-y-5 relative z-10">
-            {#each project.highlights as highlight}
-              <div class="border-l-2 border-amber-400 pl-4">
-                <h4 class="font-bold text-slate-900 dark:text-white mb-2">{highlight.title}</h4>
-                <p class="text-slate-700 dark:text-slate-300 leading-relaxed">{highlight.description}</p>
-              </div>
-            {/each}
-          </div>
+    <!-- Section header -->
+    <header class="grid grid-cols-12 gap-6 md:gap-10 mb-16 md:mb-24 reveal">
+      <div class="col-span-12 md:col-span-3">
+        <div class="folio">§02</div>
+      </div>
+      <div class="col-span-12 md:col-span-9">
+        <div class="rule-thick pt-3">
+          <div class="label mb-2">Section Two</div>
+          <h2 class="font-display text-[2.5rem] md:text-[3.75rem] leading-[1] tracking-[-0.02em]" style="font-variation-settings: 'opsz' 144, 'SOFT' 30, 'wght' 380;">
+            Selected <span style="font-style: italic;">projects.</span>
+          </h2>
+          <p class="mt-4 max-w-xl font-serif-body text-ink-soft text-[1.02rem] leading-relaxed">
+            Side work, experiments, and longer-running studies. Source available on GitHub where indicated.
+          </p>
         </div>
+      </div>
+    </header>
+
+    <div class="space-y-24">
+      {#each projects as project, i}
+        <article class="grid grid-cols-12 gap-6 md:gap-10 reveal">
+
+          <!-- Index rail -->
+          <aside class="col-span-12 md:col-span-3">
+            <div class="md:sticky md:top-24">
+              <div class="label">Project {String(i + 1).padStart(2, '0')}</div>
+              <div class="font-mono text-xs text-muted mt-2 leading-relaxed">
+                <div>Type — Personal / OSS</div>
+                <div>Status — In progress</div>
+                <div>Year — 2024–25</div>
+              </div>
+              {#if project.githubUrl}
+                <div class="mt-5">
+                  <a href={project.githubUrl} target="_blank" rel="noopener noreferrer" class="arrow-link font-mono text-sm">
+                    <span>Source on GitHub</span><span class="arrow">→</span>
+                  </a>
+                </div>
+              {/if}
+            </div>
+          </aside>
+
+          <!-- Content -->
+          <div class="col-span-12 md:col-span-9">
+            <div class="rule pt-5">
+              <h3 class="font-display text-[2rem] md:text-[3rem] leading-[1.02] tracking-[-0.025em] mb-3" style="font-variation-settings: 'opsz' 144, 'SOFT' 30, 'wght' 380;">
+                <span class="text-accent mr-2">¶</span>{project.title}<span class="text-accent">.</span>
+              </h3>
+              <p class="font-serif-body italic text-[1.18rem] text-ink-soft max-w-2xl leading-snug mb-8">
+                {project.subtitle}
+              </p>
+
+              <div class="mb-10">
+                <div class="label mb-3">Tech Stack</div>
+                <div class="flex flex-wrap gap-x-5 gap-y-1">
+                  {#each project.techStack as tech}
+                    <span class="tag">{tech}</span>
+                  {/each}
+                </div>
+              </div>
+
+              <ol class="space-y-7">
+                {#each project.highlights as highlight, j}
+                  <li class="grid grid-cols-12 gap-3 md:gap-5">
+                    <div class="col-span-2 md:col-span-1 pt-1">
+                      <span class="font-mono text-xs text-accent">→ {String(j + 1).padStart(2, '0')}</span>
+                    </div>
+                    <div class="col-span-10 md:col-span-11">
+                      <h4 class="font-display text-[1.15rem] md:text-[1.25rem] leading-snug mb-1.5" style="font-variation-settings: 'opsz' 36, 'SOFT' 30, 'wght' 520;">
+                        {highlight.title}
+                      </h4>
+                      <p class="prose font-serif-body text-[1rem] md:text-[1.05rem] leading-[1.62] text-ink-soft max-w-prose">
+                        {highlight.description}
+                      </p>
+                    </div>
+                  </li>
+                {/each}
+              </ol>
+            </div>
+          </div>
+        </article>
       {/each}
     </div>
+
   </div>
 </section>

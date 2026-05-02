@@ -1,58 +1,92 @@
 <script lang="ts">
   interface SkillCategory {
-    icon: string;
+    code: string;
     title: string;
     skills: string[];
   }
 
   const skillCategories: SkillCategory[] = [
     {
-      icon: "</>",
-      title: "Programming Languages",
+      code: "A",
+      title: "Languages",
       skills: ["Java", "JavaScript", "TypeScript", "Python", "Golang", "SQL", "HTML", "CSS"]
     },
     {
-      icon: "{ }",
-      title: "Frameworks & Libraries",
+      code: "B",
+      title: "Frameworks",
       skills: ["Express.js", "NestJS", "ReactJS", "Next.js", "Jest", "Mocha", "Playwright", "Flask", "Spring Boot", "gRPC"]
     },
     {
-      icon: "[ ]",
+      code: "C",
       title: "Tools & Platforms",
       skills: ["Git", "GitLab", "Docker", "Kubernetes", "Terraform", "MongoDB", "PostgreSQL", "Redis", "AWS", "GCP", "Firebase"]
     }
   ];
+
+  // Flatten for marquee
+  const all = skillCategories.flatMap(c => c.skills);
+  const marquee = [...all, ...all];
 </script>
 
-<section id="skills" class="py-20 px-4 bg-white dark:bg-slate-900">
-  <div class="max-w-6xl mx-auto">
-    <div class="text-center mb-16">
-      <div class="handwriting text-2xl text-amber-600 dark:text-amber-400 mb-2">What I work with</div>
-      <h2 class="text-4xl md:text-5xl font-bold text-slate-800 dark:text-slate-100">
-        Skills & Tools
-      </h2>
-    </div>
-    
-    <div class="grid md:grid-cols-3 gap-8">
+<section id="skills" class="px-6 md:px-10 py-24 md:py-32">
+  <div class="max-w-[1400px] mx-auto">
+
+    <header class="grid grid-cols-12 gap-6 md:gap-10 mb-16 md:mb-24 reveal">
+      <div class="col-span-12 md:col-span-3">
+        <div class="folio">§05</div>
+      </div>
+      <div class="col-span-12 md:col-span-9">
+        <div class="rule-thick pt-3">
+          <div class="label mb-2">Section Five</div>
+          <h2 class="font-display text-[2.5rem] md:text-[3.75rem] leading-[1] tracking-[-0.02em]" style="font-variation-settings: 'opsz' 144, 'SOFT' 30, 'wght' 380;">
+            <span style="font-style: italic;">Toolkit</span> — a complete index.
+          </h2>
+        </div>
+      </div>
+    </header>
+
+    <!-- Three column tabular index -->
+    <div class="grid grid-cols-12 gap-6 md:gap-10 reveal">
       {#each skillCategories as category, i}
-        <div class="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-slate-800 dark:to-slate-800/50 rounded-3xl p-8 hover:shadow-xl transition-all duration-300 border-2 border-amber-100 dark:border-slate-700 hover:-translate-y-2 relative overflow-hidden" style="animation-delay: {i * 0.1}s">
-          <!-- Decorative element -->
-          <div class="absolute -bottom-6 -right-6 text-9xl font-mono opacity-5 text-amber-600 dark:text-amber-400">{category.icon}</div>
-          
-          <div class="mb-6 relative z-10">
-            <div class="text-2xl font-mono text-amber-600 dark:text-amber-400 mb-2">{category.icon}</div>
-            <h3 class="text-xl font-bold text-slate-900 dark:text-white">{category.title}</h3>
-          </div>
-          
-          <div class="flex flex-wrap gap-2 relative z-10">
-            {#each category.skills as skill}
-              <span class="px-3 py-2 bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-xl text-sm font-medium border border-amber-200 dark:border-slate-600 hover:bg-amber-100 dark:hover:bg-slate-600 transition-colors">
-                {skill}
-              </span>
-            {/each}
+        <div class="col-span-12 md:col-span-4">
+          <div class="rule pt-5 h-full">
+            <div class="flex items-baseline justify-between mb-5">
+              <div>
+                <div class="label">Index {category.code}</div>
+                <h3 class="font-display text-[1.6rem] md:text-[1.85rem] mt-1 leading-tight" style="font-variation-settings: 'opsz' 96, 'SOFT' 30, 'wght' 460;">
+                  {category.title}<span class="text-accent">.</span>
+                </h3>
+              </div>
+              <div class="font-mono text-xs text-muted">{String(category.skills.length).padStart(2, '0')} entries</div>
+            </div>
+
+            <ol>
+              {#each category.skills as skill, j}
+                <li class="grid grid-cols-12 items-baseline py-2.5 border-t" style="border-color: var(--rule);">
+                  <span class="col-span-2 font-mono text-xs text-muted">{String(j + 1).padStart(2, '0')}</span>
+                  <span class="col-span-10 font-serif-body text-[1.05rem] tracking-tight">{skill}</span>
+                </li>
+              {/each}
+              <li class="border-t" style="border-color: var(--rule);"></li>
+            </ol>
           </div>
         </div>
       {/each}
+    </div>
+
+  </div>
+
+  <!-- Marquee — full bleed below the three columns -->
+  <div class="mt-24 md:mt-32 py-8 border-y reveal" style="border-color: var(--ink);" aria-hidden="true">
+    <div class="overflow-hidden whitespace-nowrap">
+      <div class="marquee-track inline-block whitespace-nowrap">
+        {#each marquee as skill, k}
+          <span class="font-display text-[2.5rem] md:text-[4rem] leading-none mx-6 align-middle" style="font-variation-settings: 'opsz' 144, 'SOFT' 30, 'wght' 360; font-style: {k % 3 === 0 ? 'italic' : 'normal'};">
+            {skill}
+          </span>
+          <span class="text-accent text-[2.5rem] md:text-[4rem] align-middle">·</span>
+        {/each}
+      </div>
     </div>
   </div>
 </section>
