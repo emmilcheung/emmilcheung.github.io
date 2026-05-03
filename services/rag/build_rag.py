@@ -34,6 +34,7 @@ from pathlib import Path
 REPO_ROOT      = Path(__file__).resolve().parents[2]
 PDF_DIR        = REPO_ROOT / "docs"
 CURATED_TEXT   = REPO_ROOT / "docs" / "resume_curated.md"
+QA_TEXT        = REPO_ROOT / "docs" / "resume_qa.md"
 DB_OUTPUT      = REPO_ROOT / "data" / "resume.db"
 
 # ── Config ────────────────────────────────────────────────────────────────────
@@ -152,6 +153,101 @@ def chunk_markdown(path: Path) -> list[Chunk]:
     flush(current_category, current_heading, buffer)
 
     print(f"  Parsed {len(chunks)} section-aware chunks from {path.name}")
+    return chunks
+
+
+# ── Q&A bank chunking ─────────────────────────────────────────────────────────
+#
+# The Q&A file is a list of `### question heading` entries. Each entry contains:
+#   - A `Question:` line listing one or more user-style paraphrases ("/"-joined)
+#   - An optional `Weight: N` line (default 1) — the chunk is duplicated N times
+#     in the index so it pulls more strongly in topK retrieval
+#   - A free-text answer body that is what the LLM actually sees
+#
+# Why embed the *question* rather than the answer:
+#   User queries follow a question distribution ("how many years…", "does he
+#   know X…"). Resume bullet-point prose lives in a different distribution, so
+#   cosine similarity between a question and a bullet is weaker than between a
+#   question and another question. By using the question paraphrases as the
+#   embed_text, the Q&A chunk lights up on exact-intent queries; the chunk's
+#   `content` (Q + A) is what the LLM consumes.
+#
+# Why duplicate instead of a per-row weight column:
+#   The downstream Lambda issues a plain k-NN query against vec_chunks and has
+#   no notion of weighting. Duplicating high-priority chunks is the simplest
+#   way to give them a stronger pull without touching the read path.
+
+_QA_QUESTION_RE = re.compile(r"^Question:\s*(.+)$", re.IGNORECASE)
+_QA_WEIGHT_RE   = re.compile(r"^Weight:\s*(\d+)\s*$", re.IGNORECASE)
+
+
+def chunk_qa(path: Path) -> list[Chunk]:
+    """Parse the curated Q&A markdown into weighted Chunk objects."""
+    if not path.exists():
+        print(f"  No Q&A file at {path} — skipping Q&A boost.")
+        return []
+
+    text = path.read_text(encoding="utf-8")
+    lines = text.splitlines()
+
+    entries: list[tuple[str, str, int, list[str]]] = []  # (heading, question, weight, body_lines)
+    current_heading: str | None = None
+    current_question: str = ""
+    current_weight: int = 1
+    buffer: list[str] = []
+
+    def commit() -> None:
+        if current_heading is None:
+            return
+        entries.append((current_heading, current_question, current_weight, list(buffer)))
+
+    for line in lines:
+        if line.startswith("<!--") or line.strip().startswith("-->"):
+            # skip HTML-style comment blocks (single-line tolerance only)
+            continue
+        h3 = _H3_RE.match(line)
+        if h3:
+            commit()
+            current_heading = h3.group(1).strip()
+            current_question = current_heading  # fallback if no Question: line
+            current_weight = 1
+            buffer = []
+            continue
+
+        q_match = _QA_QUESTION_RE.match(line.strip())
+        w_match = _QA_WEIGHT_RE.match(line.strip())
+        if q_match and current_heading is not None and not buffer:
+            current_question = q_match.group(1).strip()
+            continue
+        if w_match and current_heading is not None and not buffer:
+            current_weight = max(1, int(w_match.group(1)))
+            continue
+
+        buffer.append(line)
+
+    commit()
+
+    chunks: list[Chunk] = []
+    for heading, question, weight, body_lines in entries:
+        body = clean_text("\n".join(body_lines))
+        if not body:
+            continue
+        # Content shown to the LLM: canonical question + curated answer.
+        content = f"Q: {heading}\nA: {body}"
+        # Embedded text: the user-style paraphrases ONLY. Keeping the embed text
+        # in question-shape is what makes Q&A chunks dominate retrieval for
+        # the queries they were written to answer.
+        embed_text = f"Category: faq\n\nQuestion: {question}"
+        for _ in range(weight):
+            chunks.append(Chunk(
+                category="faq",
+                content=content,
+                embed_text=embed_text,
+            ))
+
+    weighted = sum(1 for _ in chunks)
+    distinct = len(entries)
+    print(f"  Parsed {distinct} Q&A entries → {weighted} weighted chunks from {path.name}")
     return chunks
 
 
@@ -284,6 +380,8 @@ def main() -> None:
     if not force_pdf and CURATED_TEXT.exists():
         print(f"Using curated markdown source: {CURATED_TEXT}")
         chunks = chunk_markdown(CURATED_TEXT)
+        # Q&A boost only applies to curated mode — PDF mode is a legacy escape hatch
+        chunks += chunk_qa(QA_TEXT)
     else:
         print("Falling back to PDF source (set SOURCE_MODE=pdf to silence this)")
         chunks = chunk_pdf()
