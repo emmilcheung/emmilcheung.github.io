@@ -1,199 +1,206 @@
 <script lang="ts">
-  interface Achievement {
-    title: string;
-    description: string;
-    descriptionHtml?: string;
+  interface SubProject {
+    name: string;
+    desc: string;
+    metric: string;
+    url?: string;
   }
 
-  interface Experience {
+  interface ExperienceItem {
+    period: string;
+    duration: string;
+    location: string;
+    roleTag: string;
     title: string;
     company: string;
+    companyAccent?: boolean;
     companyUrl?: string;
-    location: string;
-    period: string;
-    techStack: string[];
-    achievements: Achievement[];
+    summary: string;
+    projects?: SubProject[];
+    stack: string[];
   }
 
-  const experiences: Experience[] = [
+  const experiences: ExperienceItem[] = [
     {
-      title: "Programmer",
-      company: "Zensis Limited",
-      companyUrl: "https://www.zensis.com/",
-      location: "Hong Kong",
       period: "Aug 2021 — Aug 2025",
-      techStack: ["NodeJS", "Java", "Python", "React.js", "MongoDB", "Redis", "Docker", "AWS"],
-      achievements: [
-        {
-          title: "Cloud Native Development",
-          description: "Served as a key contributor and maintainer for cloud native applications throughout the full Software Development Life Cycle (SDLC), encompassing requirement analysis, technical planning, development, deployment and documentation"
-        },
-        {
-          title: "CI/CD & DevOps",
-          description: "Established GitOps and CI/CD workflows for both internal and client projects by streamlining development processes through GitLab CI, Docker, Terraform and Jenkins, achieving 50%+ reduction in time required to introduce new projects and stages"
-        },
-        {
-          title: "System Architecture",
-          description: "Facilitated the in-house system revamp by Object-Orientated Design and Dependency Injection (DI) framework in TypeScript with comprehensive unit and integration tests, achieving a 70%+ increase in code coverage and reduction in bugs report"
-        },
-        {
-          title: "Enterprise Solutions",
-          description: "Designed and developed backend services and APIs in NodeJS for the staff communication application of Wilson Group utilizing service-oriented architecture (SOA), role-based access control (RBAC) and Terraform on AWS and MongoDB Atlas, facilitating on-job training, events and information delivery within 5000+ active employees",
-          descriptionHtml: 'Designed and developed backend services and APIs in NodeJS for the <a href="https://www.zensis.com/portfolio/wilson-group/" target="_blank" rel="noopener noreferrer">staff communication application</a> of Wilson Group utilizing service-oriented architecture (SOA), role-based access control (RBAC) and Terraform on AWS and MongoDB Atlas, facilitating on-job training, events and information delivery within <strong>5000+ active employees</strong>'
-        },
-        {
-          title: "Serverless Architecture",
-          description: "Managed an event-driven system and organizer panel of a real-time trail running event application under AWS serverless architecture (AWS Lambda, SQS, AppSync, S3, CloudWatch), GraphQL and Next.js, supporting 20+ public events annually",
-          descriptionHtml: 'Managed an event-driven system and organizer panel of a real-time <a href="https://www.zensis.com/portfolio/trailme/" target="_blank" rel="noopener noreferrer">trail running event application</a> under AWS serverless architecture (AWS Lambda, SQS, AppSync, S3, CloudWatch), GraphQL and Next.js, supporting <strong>20+ public events annually</strong>'
-        },
-        {
-          title: "Frontend Development",
-          description: "Built front-end web applications, widgets, and UI components under React.js and modern JavaScript best practices for clients across diverse industries including 9GAG, ViuTV, Makealive, Open Up, GO PARK Sports, and government",
-          descriptionHtml: 'Built front-end web applications, widgets, and UI components under React.js and modern JavaScript best practices for clients across diverse industries including <a href="https://9gag.com/" target="_blank" rel="noopener noreferrer">9GAG</a>, <a href="https://www.zensis.com/portfolio/viutv/" target="_blank" rel="noopener noreferrer">ViuTV</a>, <a href="https://makealive.com/" target="_blank" rel="noopener noreferrer">Makealive</a>, <a href="https://www.zensis.com/portfolio/openup/" target="_blank" rel="noopener noreferrer">Open Up</a>, <a href="https://www.zensis.com/portfolio/go-park-sports/" target="_blank" rel="noopener noreferrer">GO PARK Sports</a>, and <a href="https://www.zensis.com/portfolio/ipdnofakes/" target="_blank" rel="noopener noreferrer">government</a>'
-        },
-        {
-          title: "AI Integration",
-          description: "Built in-house product, Chatsquare (Q&A Chatbot, Admin panel), and feedback system with Next.js, LangChain and Redis",
-          descriptionHtml: 'Built in-house product, <a href="https://www.chatsquare.ai/" target="_blank" rel="noopener noreferrer">Chatsquare</a> (Q&A Chatbot, Admin panel), and feedback system with Next.js, LangChain and Redis'
-        },
-        {
-          title: "Legacy Maintenance",
-          description: "Participated in maintenance and support routine for legacy systems in Vert.x 3 (Java), Flask (Python) and NodeJS"
-        }
-      ]
-    },
-    {
-      title: "Web App Development Intern",
-      company: "ponte+",
-      companyUrl: "https://hk.linkedin.com/company/ponteplus",
+      duration: "~4 years · current",
       location: "Hong Kong",
-      period: "Aug 2020 — Oct 2020",
-      techStack: ["NodeJS", "React.js", "Firebase", "Adobe XD"],
-      achievements: [
-        {
-          title: "PWA Development",
-          description: "Developed a mobile-first Progressive Web App (PWA) focused on performing art events from scratch and delivered to beta"
-        },
-        {
-          title: "Collaboration",
-          description: "Participated in weekly meetings with director, supervisor and UI/UX Designer on business and development direction"
-        }
-      ]
+      roleTag: "Software Developer · Programmer",
+      title: "Software Developer",
+      company: "Zensis Limited",
+      companyAccent: true,
+      companyUrl: "https://www.zensis.com/",
+      summary: "Owned cloud-native client applications end-to-end — requirement analysis, architecture, build, deploy, and on-call. Worked across backend, frontend, and DevOps. Established GitOps + CI/CD across the org, cutting deploy lead time by 50%+.",
+      projects: [
+        { name: "Wilson Group · staff comms", desc: "Multi-tenant SaaS backend on AWS + MongoDB Atlas. Service-oriented, tenant-aware, RBAC.", metric: "5,000+ active employees", url: "https://www.zensis.com/portfolio/wilson-group/" },
+        { name: "TrailMe · real-time trail running", desc: "Event-driven AWS serverless: Lambda, AppSync, SQS, S3. Next.js organiser admin.", metric: "20+ public events / year", url: "https://www.zensis.com/portfolio/trailme/" },
+        { name: "Internal employee system", desc: "Architected revamp + migration Heroku → GCP (Cloud Run, Pub/Sub, Firestore).", metric: "~70% hosting cost cut" },
+        { name: "Chatsquare · LLM product", desc: "Q&A chatbot, admin panel, feedback loop. Next.js + LangChain + Redis.", metric: "Prior LLM/RAG production work", url: "https://www.chatsquare.ai/" },
+      ],
+      stack: ["NodeJS", "TypeScript", "Java", "Python", "React", "AWS", "GCP", "MongoDB", "Redis", "Docker", "Terraform", "GitLab CI"],
     },
     {
-      title: "Customer Service Assistant",
-      company: "The Commercial Press (HK) Ltd",
-      companyUrl: "https://www.commercialpress.com.hk/ww/index.html",
-      location: "Hong Kong · Part-time",
+      period: "Aug 2020 — Oct 2020",
+      duration: "3 months · internship",
+      location: "Hong Kong",
+      roleTag: "Web App Development Intern",
+      title: "Intern",
+      company: "ponte+",
+      companyAccent: true,
+      companyUrl: "https://hk.linkedin.com/company/ponteplus",
+      summary: "Built a mobile-first PWA for performing-arts events from scratch and shipped a functional beta in 10 weeks. Weekly direction-setting with the director, supervisor, and UI/UX designer.",
+      stack: ["NodeJS", "React", "Firebase", "PWA"],
+    },
+    {
       period: "Feb 2017 — Oct 2020",
-      techStack: [],
-      achievements: [
-        {
-          title: "Customer Operations",
-          description: "Supported daily store operations, customer assistance, product purchases and inter-shop logistic arrangement"
-        },
-        {
-          title: "Tool Development",
-          description: "Built a book search web application with React.js and Flask (Python) for internal use to facilitate book search and inventory check"
-        },
-        {
-          title: "Order Communication Automation",
-          description: "Enhanced message delivery on order status updates to customers by developing automated VBA scripts integrated with WhatsApp Business API"
-        }
-      ]
-    }
+      duration: "3.5 years · part-time",
+      location: "Hong Kong",
+      roleTag: "Customer Service · Part-time",
+      title: "Customer Service Assistant",
+      company: "The Commercial Press HK",
+      companyAccent: false,
+      companyUrl: "https://www.commercialpress.com.hk/ww/index.html",
+      summary: "Retail role during school + uni. Quietly automated order comms — first production-style automation, a foreshadowing of later DevOps work.",
+      stack: ["VBA", "Python", "WhatsApp Business API", "React", "Flask"],
+    },
   ];
 </script>
 
-<section id="work" class="px-6 md:px-10 py-24 md:py-32">
-  <div class="max-w-[1400px] mx-auto">
-
-    <!-- Section header -->
-    <header class="grid grid-cols-12 gap-6 md:gap-10 mb-16 md:mb-24 reveal">
-      <div class="col-span-12 md:col-span-3">
-        <div class="folio">§01</div>
+<section class="section lined" id="work">
+  <div class="container">
+    <div class="section-head">
+      <div class="left">
+        <div class="section-num">§ EXPERIENCE</div>
+        <h2 class="h2">What I've shipped in production.</h2>
+        <p class="sublead">Four years at Zensis on cloud-native client work — backend, frontend, DevOps depending on the project. Before that, a PWA internship and several years of part-time work where automation crept in.</p>
       </div>
-      <div class="col-span-12 md:col-span-9">
-        <div class="rule-thick pt-3">
-          <div class="label mb-2">Section One</div>
-          <h2 class="font-display text-[2.5rem] md:text-[3.75rem] leading-[1] tracking-[-0.02em]" style="font-variation-settings: 'opsz' 144, 'SOFT' 30, 'wght' 380;">
-            A working <span style="font-style: italic;">history.</span>
-          </h2>
-          <p class="mt-4 max-w-xl font-serif-body text-ink-soft text-[1.02rem] leading-relaxed">
-            Roles, places, and the things shipped. Listed in reverse chronological order — most recent first, in the manner of a printed CV.
-          </p>
-        </div>
-      </div>
-    </header>
+    </div>
 
-    <!-- Experience entries -->
-    <div class="space-y-20 md:space-y-28">
+    <div class="exp-list">
       {#each experiences as exp, i}
-        <article class="grid grid-cols-12 gap-6 md:gap-10 reveal" style="transition-delay: {i * 80}ms;">
-
-          <!-- Year rail -->
-          <aside class="col-span-12 md:col-span-3">
-            <div class="md:sticky md:top-24">
-              <div class="label">{String(i + 1).padStart(2, '0')} / {String(experiences.length).padStart(2, '0')}</div>
-              <div class="font-mono text-sm mt-2 text-ink">{exp.period}</div>
-              <div class="mt-1 font-mono text-xs text-muted">{exp.location}</div>
-            </div>
-          </aside>
-
-          <!-- Content -->
-          <div class="col-span-12 md:col-span-9">
-            <div class="rule pt-5">
-              <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2 mb-1">
-                <h3 class="font-display text-[1.85rem] md:text-[2.4rem] leading-[1.05] tracking-[-0.02em]" style="font-variation-settings: 'opsz' 96, 'SOFT' 30, 'wght' 400;">
-                  {exp.title}
-                </h3>
-                <div class="font-mono text-xs uppercase tracking-[0.18em] text-muted">at —</div>
-              </div>
-              <p class="font-serif-body text-[1.15rem] italic text-ink-soft mb-6">
-                {#if exp.companyUrl}
-                  <a href={exp.companyUrl} target="_blank" rel="noopener noreferrer" class="editorial-link">{exp.company}</a>
-                {:else}
-                  {exp.company}
-                {/if}
-              </p>
-
-              {#if exp.techStack.length > 0}
-                <div class="mb-8">
-                  <div class="label mb-3">Stack</div>
-                  <div class="flex flex-wrap gap-x-5 gap-y-1">
-                    {#each exp.techStack as tech}
-                      <span class="tag">{tech}</span>
-                    {/each}
-                  </div>
-                </div>
+        <article class="exp-item reveal" style="--reveal-delay:{i * 60}ms">
+          <div class="when">
+            <div class="period">{exp.period}</div>
+            <div class="duration">{exp.duration}</div>
+            <div class="loc">📍 {exp.location}</div>
+          </div>
+          <div class="what">
+            <div class="role-tag">{exp.roleTag}</div>
+            <h3>
+              {exp.title}
+              <span class="at">at</span>
+              {#if exp.companyUrl}
+                <a href={exp.companyUrl} target="_blank" rel="noopener" class="co">{exp.company}</a>
+              {:else}
+                <span class="co">{exp.company}</span>
               {/if}
+            </h3>
+            <p class="summary">{exp.summary}</p>
 
-              <ol class="space-y-6">
-                {#each exp.achievements as achievement, j}
-                  <li class="grid grid-cols-12 gap-3 md:gap-5">
-                    <div class="col-span-2 md:col-span-1 pt-1">
-                      <span class="font-mono text-xs text-accent">→ {String(j + 1).padStart(2, '0')}</span>
+            {#if exp.projects}
+              <div class="exp-projects">
+                {#each exp.projects as proj}
+                  <div class="exp-project">
+                    <div class="name">
+                      {proj.name}
+                      {#if proj.url}<span class="arrow-out">↗</span>{/if}
                     </div>
-                    <div class="col-span-10 md:col-span-11">
-                      <h4 class="font-display text-[1.1rem] md:text-[1.18rem] leading-snug mb-1.5" style="font-variation-settings: 'opsz' 36, 'SOFT' 30, 'wght' 520;">
-                        {achievement.title}
-                      </h4>
-                      <p class="prose font-serif-body text-[1rem] md:text-[1.04rem] leading-[1.6] text-ink-soft max-w-prose">
-                        {#if achievement.descriptionHtml}
-                          {@html achievement.descriptionHtml}
-                        {:else}
-                          {achievement.description}
-                        {/if}
-                      </p>
-                    </div>
-                  </li>
+                    <div class="desc">{proj.desc}</div>
+                    <div class="metric">{proj.metric}</div>
+                  </div>
                 {/each}
-              </ol>
+              </div>
+            {/if}
+
+            <div class="exp-stack">
+              {#each exp.stack as tech}
+                <span class="stack-tag">{tech}</span>
+              {/each}
             </div>
           </div>
         </article>
       {/each}
     </div>
-
   </div>
 </section>
+
+<style>
+  .exp-list { display: flex; flex-direction: column; }
+
+  .exp-item {
+    display: grid; grid-template-columns: 200px 1fr;
+    gap: 40px;
+    padding: 28px 0;
+    border-top: 1px solid var(--border-soft);
+  }
+  .exp-item:first-child { border-top: 0; padding-top: 0; }
+
+  .when .period {
+    font-family: 'JetBrains Mono', monospace; font-size: 13px;
+    color: var(--text); letter-spacing: -0.005em;
+  }
+  .when .duration {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-faint); margin-top: 4px;
+  }
+  .when .loc {
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--text-faint); margin-top: 10px;
+    display: flex; align-items: center; gap: 6px;
+  }
+
+  h3 {
+    font-size: 22px; letter-spacing: -0.015em; font-weight: 600;
+    margin: 0 0 4px;
+    color: var(--text);
+  }
+  .at { color: var(--text-faint); font-weight: 400; margin: 0 4px; }
+  .co { color: var(--accent); font-weight: 600; }
+
+  .summary {
+    color: var(--text-dim); font-size: 15px; margin: 10px 0 18px;
+    max-width: 720px; line-height: 1.6;
+  }
+
+  .exp-projects { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+
+  .exp-project {
+    padding: 14px 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    transition: border-color 160ms;
+  }
+  .exp-project:hover { border-color: var(--accent-soft); }
+
+  .name {
+    font-size: 13px; font-weight: 600; color: var(--text);
+    display: flex; align-items: center; gap: 8px;
+    margin-bottom: 4px;
+  }
+  .arrow-out { color: var(--text-faint); font-size: 11px; transition: color 160ms; }
+  .exp-project:hover .arrow-out { color: var(--accent); }
+
+  .desc { font-size: 13px; color: var(--text-dim); line-height: 1.5; }
+
+  .metric {
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px;
+    color: var(--accent);
+  }
+
+  .exp-stack { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px; }
+
+  @media (max-width: 768px) {
+    .exp-item {
+      grid-template-columns: 1fr;
+      gap: 16px;
+      padding: 28px 0;
+    }
+    .when { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 14px; }
+    .when .loc { margin-top: 0; }
+    h3 { font-size: 20px; }
+    .summary { font-size: 14px; }
+    .exp-projects { grid-template-columns: 1fr; }
+  }
+</style>

@@ -4,35 +4,24 @@
   import { marked } from 'marked';
   import DOMPurify from 'dompurify';
 
-  export let message: Message;
+  let { message }: { message: Message } = $props();
 
-  // Only parse markdown once typing is complete to avoid flickering on partial syntax.
-  // User messages are always rendered as plain text.
-  $: renderedHtml =
+  const renderedHtml = $derived(
     message.role === 'assistant' && !message.typing && message.content
       ? DOMPurify.sanitize(marked.parse(message.content) as string, {
           ALLOWED_TAGS: ['p', 'strong', 'em', 'ul', 'ol', 'li', 'code', 'br'],
           ALLOWED_ATTR: [],
         })
-      : null;
+      : null
+  );
 </script>
 
-<div class="flex {message.role === 'user' ? 'justify-end' : 'justify-start'} mb-3">
+<div class="msg-wrap" class:user={message.role === 'user'} class:bot={message.role === 'assistant'}>
   {#if message.role === 'assistant'}
-    <!-- Avatar -->
-    <div class="w-7 h-7 rounded-full bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center text-white text-xs font-bold mr-2 mt-auto mb-0.5 shrink-0">
-      E
-    </div>
+    <div class="avatar">AI</div>
   {/if}
 
-  <div
-    class="
-      max-w-[78%] px-3.5 py-2.5 rounded-2xl text-sm leading-relaxed shadow-sm
-      {message.role === 'user'
-        ? 'bg-gradient-to-br from-amber-400 to-orange-500 text-white rounded-br-sm'
-        : 'bg-white dark:bg-slate-700 text-slate-700 dark:text-slate-200 rounded-bl-sm border border-slate-100 dark:border-slate-600'}
-    "
-  >
+  <div class="bubble" class:user-bubble={message.role === 'user'} class:bot-bubble={message.role === 'assistant'}>
     {#if message.typing && message.content === ''}
       <TypingIndicator />
     {:else if renderedHtml !== null}
@@ -41,41 +30,65 @@
       {message.content}
     {/if}
   </div>
+
+  {#if message.role === 'user'}
+    <div class="avatar user-av">U</div>
+  {/if}
 </div>
 
 <style>
-  /* Styles for markdown content injected via {@html}. Must use :global()
-     because Svelte's scoped hash does not apply to dynamically injected HTML. */
-  .msg-md :global(p) {
-    margin: 0 0 0.35em;
+  .msg-wrap {
+    display: flex; gap: 12px; margin-bottom: 14px;
+    max-width: 92%;
   }
-  .msg-md :global(p:last-child) {
-    margin-bottom: 0;
+  .msg-wrap.user { align-self: flex-end; margin-left: auto; }
+  .msg-wrap.bot { align-self: flex-start; }
+
+  .avatar {
+    flex-shrink: 0;
+    width: 28px; height: 28px; border-radius: 7px;
+    display: grid; place-items: center;
+    font-size: 11px; font-weight: 700;
+    font-family: 'JetBrains Mono', monospace;
+    background: linear-gradient(135deg, var(--accent, #00E5FF), var(--violet, #A78BFA));
+    color: var(--on-accent, #02141a);
+    align-self: flex-end;
   }
-  .msg-md :global(ul),
-  .msg-md :global(ol) {
-    margin: 0.25em 0 0.35em 1.1em;
-    padding: 0;
+  .user-av {
+    background: var(--surface-2, #181C26);
+    color: var(--text-dim, #8B93A7);
+    border: 1px solid var(--border, #1F2330);
   }
-  .msg-md :global(ul) {
-    list-style: disc;
+
+  .bubble {
+    padding: 11px 14px;
+    border-radius: 10px;
+    font-size: 14px; line-height: 1.55;
   }
-  .msg-md :global(ol) {
-    list-style: decimal;
+  .bot-bubble {
+    background: var(--surface-2, #181C26);
+    border: 1px solid var(--border, #1F2330);
+    color: var(--text, #E8EBF2);
   }
-  .msg-md :global(li) {
-    margin: 0.15em 0;
+  .user-bubble {
+    background: var(--accent-faint, rgba(0,229,255,0.08));
+    border: 1px solid var(--accent-soft, rgba(0,229,255,0.22));
+    color: var(--text, #E8EBF2);
   }
-  .msg-md :global(strong) {
-    font-weight: 600;
-  }
-  .msg-md :global(em) {
-    font-style: italic;
-  }
+
+  .msg-md :global(p) { margin: 0 0 0.35em; }
+  .msg-md :global(p:last-child) { margin-bottom: 0; }
+  .msg-md :global(ul), .msg-md :global(ol) { margin: 0.25em 0 0.35em 1.1em; padding: 0; }
+  .msg-md :global(ul) { list-style: disc; }
+  .msg-md :global(ol) { list-style: decimal; }
+  .msg-md :global(li) { margin: 0.15em 0; }
+  .msg-md :global(strong) { font-weight: 600; color: var(--text, #E8EBF2); }
+  .msg-md :global(em) { font-style: italic; }
   .msg-md :global(code) {
-    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family: 'JetBrains Mono', ui-monospace, monospace;
     font-size: 0.82em;
-    background: rgba(0, 0, 0, 0.07);
+    background: var(--accent-faint, rgba(0,229,255,0.08));
+    color: var(--accent, #00E5FF);
     padding: 0.1em 0.3em;
     border-radius: 3px;
   }

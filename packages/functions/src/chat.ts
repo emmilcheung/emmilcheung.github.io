@@ -128,6 +128,7 @@ function topKChunks(queryEmbedding: Float32Array, k: number): RankedChunk[] {
   return rows.map(r => ({
     category: r.category,
     content:  r.content,
+    // cosine similarity = 1 - L2_distance²/2 for unit vectors; gives a nice [−1, 1] score range
     score:    1 - r.distance ** 2 / 2,
   }));
 }
@@ -244,7 +245,7 @@ export const handler = async (event: APIGatewayProxyEventV2): Promise<APIGateway
       return ok({
         answer:
           "The assistant is temporarily unavailable due to high demand — this is expected behaviour, not a malfunction. " +
-          "Please try again in a moment, or feel free to reach out directly at emmilcheung2005@gmail.com.",
+          "Please try again in a moment, or feel free to reach out directly.",
       });
     }
 

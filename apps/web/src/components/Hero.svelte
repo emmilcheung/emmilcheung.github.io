@@ -1,98 +1,164 @@
 <script lang="ts">
-  // Editorial hero — no runtime state required.
-  const today = new Date().toLocaleDateString('en-GB', { day: '2-digit', month: 'long', year: 'numeric' });
+  // No runtime state needed
 </script>
 
-<section id="hero" class="relative min-h-screen px-6 md:px-10 pt-24 pb-20 overflow-hidden">
-  <div class="max-w-[1400px] mx-auto h-full">
+<section class="hero">
+  <div class="container">
+    <div class="hero-stack reveal">
 
-    <!-- Top meta strip: a printed-paper "issue" line -->
-    <div class="rule-thick pt-3 mb-10 flex flex-wrap items-baseline justify-between gap-4 text-xs font-mono uppercase tracking-[0.18em] text-ink-soft">
-      <span>Vol. I — Issue 03</span>
-      <span class="text-muted hidden sm:inline">A field record of cloud-native engineering</span>
-      <span>{today}</span>
-    </div>
-
-    <!-- Asymmetric grid: large name on left, columned intro on right -->
-    <div class="grid grid-cols-12 gap-6 md:gap-10">
-
-      <!-- Decorative running header -->
-      <div class="col-span-12 mb-2 reveal">
-        <div class="label">— Folio Personnel · CV / Portfolio</div>
-      </div>
-
-      <!-- Massive serif name, breaking the grid -->
-      <div class="col-span-12 reveal" style="transition-delay: 80ms;">
-        <h1 class="hero-name text-[15vw] md:text-[13.5vw] leading-[0.86]">
-          <span class="block">Emmil</span>
-          <span class="block">
-            <span class="ital">Cheung</span><span class="text-accent">.</span>
-          </span>
-        </h1>
-      </div>
-
-      <!-- Sub-headline + columns -->
-      <div class="col-span-12 grid grid-cols-12 gap-6 md:gap-10 mt-12 md:mt-16">
-
-        <!-- Lede column with drop cap -->
-        <div class="col-span-12 md:col-span-6 lg:col-span-5 reveal" style="transition-delay: 160ms;">
-          <p class="dropcap font-serif-body text-[1.15rem] md:text-[1.18rem] leading-[1.55] text-ink">
-            Full-stack engineer working at the seams of distributed systems, cloud infrastructure, and the parts of the web that quietly hold a company together. Four years building and maintaining production services in Hong Kong — Node, Java, Go, AWS — across event-driven platforms, internal tools, and the occasional AI side-quest.
-          </p>
-          <div class="mt-8 flex flex-wrap items-center gap-x-6 gap-y-3">
-            <a class="arrow-link font-mono text-sm" href="https://github.com/emmilcheung" target="_blank" rel="noopener noreferrer">
-              <span>GitHub</span><span class="arrow">→</span>
-            </a>
-            <a class="arrow-link font-mono text-sm" href="https://www.linkedin.com/in/emmil-cheung/" target="_blank" rel="noopener noreferrer">
-              <span>LinkedIn</span><span class="arrow">→</span>
-            </a>
-            <a class="arrow-link font-mono text-sm" href="mailto:emmilcheung2005@gmail.com">
-              <span>Mail</span><span class="arrow">→</span>
-            </a>
-          </div>
+      <div class="name-row">
+        <div class="avatar">EC
+          <span class="online-dot"></span>
         </div>
-
-        <!-- Specifications column — like a printed product sheet -->
-        <div class="col-span-12 md:col-span-5 md:col-start-8 reveal" style="transition-delay: 240ms;">
-          <div class="label mb-3">Specifications</div>
-          <div>
-            <div class="spec-row">
-              <span class="label">Role</span>
-              <span class="font-serif-body text-[1.02rem]">Full-stack Developer · Cloud Native</span>
-            </div>
-            <div class="spec-row">
-              <span class="label">Located</span>
-              <span class="font-serif-body text-[1.02rem]">Sha Tin, Hong Kong</span>
-            </div>
-            <div class="spec-row">
-              <span class="label">Years</span>
-              <span class="font-serif-body text-[1.02rem]">2021 — present</span>
-            </div>
-            <div class="spec-row">
-              <span class="label">Stack</span>
-              <span class="font-serif-body text-[1.02rem]">Node · Java · Go · TS · AWS · K8s</span>
-            </div>
-            <div class="spec-row">
-              <span class="label">Status</span>
-              <span class="font-serif-body text-[1.02rem]">
-                <span class="inline-block w-2 h-2 bg-accent rounded-full mr-2 align-middle" aria-hidden></span>Open to opportunities
-              </span>
-            </div>
-          </div>
+        <div>
+          <div class="eyebrow"><span class="dot"></span>Hong Kong · GMT+8 · Open to work</div>
+          <div class="mono handle">emmil.cheung</div>
         </div>
-
       </div>
-    </div>
 
-    <!-- Bottom marker — page folio + scroll cue -->
-    <div class="mt-20 md:mt-28 flex items-end justify-between text-xs font-mono uppercase tracking-[0.18em] text-muted reveal" style="transition-delay: 320ms;">
-      <div class="flex items-center gap-3">
-        <span class="inline-block w-10 h-px bg-ink"></span>
-        <span>Page 01 / 06</span>
+      <h1 class="hero-headline">
+        Backend &amp; cloud engineer<br class="hide-mobile"/>
+        who ships production <span class="accent">systems.</span>
+      </h1>
+
+      <p class="hero-lead">
+        <span class="dim">4 years building</span> event-driven serverless backends,
+        multi-tenant SaaS, and LLM products
+        <span class="dim">— from architecture to deploy.</span>
+      </p>
+
+      <div class="ctas">
+        <a class="btn primary" href="#chatbot-widget">
+          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+          Ask my AI about me
+          <span class="arrow">→</span>
+        </a>
+        <a class="btn" href="#work">See work</a>
+        <a class="btn" href="https://github.com/emmilcheung" target="_blank" rel="noopener">
+          <svg class="icon" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56 0-.27-.01-1.16-.02-2.1-3.2.7-3.87-1.36-3.87-1.36-.52-1.32-1.27-1.67-1.27-1.67-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.02 1.75 2.68 1.25 3.34.96.1-.74.4-1.25.73-1.54-2.55-.29-5.24-1.27-5.24-5.67 0-1.25.45-2.27 1.18-3.07-.12-.29-.51-1.45.11-3.03 0 0 .96-.31 3.15 1.17a10.95 10.95 0 0 1 5.74 0c2.19-1.48 3.15-1.17 3.15-1.17.62 1.58.23 2.74.11 3.03.73.8 1.18 1.82 1.18 3.07 0 4.41-2.7 5.38-5.26 5.66.41.36.78 1.06.78 2.14 0 1.55-.01 2.8-.01 3.18 0 .31.21.68.8.56C20.21 21.38 23.5 17.07 23.5 12 23.5 5.65 18.35.5 12 .5z"/></svg>
+          GitHub
+        </a>
       </div>
-      <a href="#work" class="arrow-link" aria-label="Scroll to work">
-        <span>Continue</span><span class="arrow">↓</span>
-      </a>
+
+      <div class="hero-stats">
+        <div class="stat">
+          <div class="v">4<span class="accent">+</span></div>
+          <div class="k">Years shipping</div>
+        </div>
+        <!-- <div class="stat">
+          <div class="v">5K<span class="accent">+</span></div>
+          <div class="k">Daily users served</div>
+        </div> -->
+        <div class="stat">
+          <div class="v">CUHK</div>
+          <div class="k">B.Sc in Computer Science</div>
+        </div>
+        <div class="stat">
+          <div class="v">AWS</div>
+          <div class="k">DVA Certified · '25</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
+
+<style>
+  .hero { padding: 80px 0 100px; }
+
+  .hero-stack { max-width: 900px; display: flex; flex-direction: column; }
+
+  .name-row { display: flex; align-items: center; gap: 16px; margin-bottom: 28px; }
+
+  .avatar {
+    width: 56px; height: 56px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--surface-2), var(--surface));
+    border: 1px solid var(--border);
+    display: grid; place-items: center;
+    font-weight: 700; font-size: 22px;
+    color: var(--text);
+    position: relative;
+    flex-shrink: 0;
+  }
+  .online-dot {
+    position: absolute; right: -2px; bottom: -2px;
+    width: 14px; height: 14px; border-radius: 50%;
+    background: var(--success);
+    border: 3px solid var(--bg);
+  }
+
+  .handle {
+    font-size: 12px; color: var(--text-faint); margin-top: 6px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  .hero-headline {
+    font-size: clamp(38px, 7.4vw, 88px);
+    line-height: 1.0;
+    letter-spacing: -0.038em;
+    font-weight: 700;
+    margin: 8px 0 0;
+    color: var(--text);
+  }
+  .hero-headline .accent { color: var(--accent); }
+
+  .hero-lead {
+    margin-top: 24px;
+    font-size: clamp(16px, 1.6vw, 20px);
+    line-height: 1.5;
+    color: var(--text);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    max-width: 700px;
+  }
+  .hero-lead .dim { color: var(--text-dim); font-weight: 400; }
+
+  .ctas { display: flex; gap: 10px; margin-top: 32px; flex-wrap: wrap; }
+
+  .hero-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    margin-top: 48px;
+    border-top: 1px solid var(--border);
+    border-bottom: 1px solid var(--border);
+  }
+  .stat {
+    padding: 18px 16px 18px 0;
+    border-right: 1px solid var(--border);
+  }
+  .stat:last-child { border-right: 0; padding-right: 0; }
+  .stat:not(:first-child) { padding-left: 18px; }
+  .v {
+    font-size: 28px; font-weight: 700; letter-spacing: -0.02em;
+    color: var(--text);
+    font-feature-settings: 'tnum';
+  }
+  .v .accent { color: var(--accent); }
+  .k {
+    font-size: 11px; color: var(--text-faint);
+    font-family: 'JetBrains Mono', monospace;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  .hide-mobile { display: block; }
+
+  @media (max-width: 768px) {
+    .hero { padding: 40px 0 56px; }
+    .hide-mobile { display: none; }
+    .hero-headline { font-size: 38px; letter-spacing: -0.03em; }
+    .hero-lead { font-size: 16px; }
+    .name-row { gap: 12px; margin-bottom: 22px; }
+    .avatar { width: 48px; height: 48px; font-size: 18px; }
+    .ctas { gap: 8px; margin-top: 24px; }
+    .hero-stats { grid-template-columns: 1fr 1fr; margin-top: 32px; }
+    .stat { padding: 14px 12px; border-right: 0; }
+    .stat:nth-child(odd) { padding-left: 0; border-right: 1px solid var(--border); }
+    .stat:nth-child(even) { padding-left: 16px; }
+    .stat:nth-child(3), .stat:nth-child(4) { border-top: 1px solid var(--border); }
+    .v { font-size: 22px; }
+  }
+
+  @media (max-width: 480px) {
+    .hero-headline { font-size: 32px; }
+  }
+</style>
